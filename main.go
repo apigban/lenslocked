@@ -39,7 +39,6 @@ func (router Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// TODO - router
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
