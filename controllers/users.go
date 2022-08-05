@@ -77,3 +77,15 @@ func (u Users) ProcessSignIn(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "User authenticated: %+v", user)
 	// TODO - redirect user to their gallery on successful login
 }
+
+func (u Users) CurrentUser(w http.ResponseWriter, r *http.Request) {
+	email, err := r.Cookie("email")
+
+	// TODO - redirect user to the login page if cookie is missing
+	if err != nil {
+		fmt.Fprint(w, "the email cookie could not be read.")
+		return
+	}
+
+	fmt.Fprintf(w, "Email cookie: %s\n", email.Value)
+}
