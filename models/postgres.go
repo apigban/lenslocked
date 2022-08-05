@@ -26,7 +26,7 @@ func DefaultPostgresConfig() PostgresConfig {
 		User:     "admin",
 		Password: "P@ssw0rd",
 		Database: "lenslocked",
-		SSLMode:  "disabled",
+		SSLMode:  "disable",
 	}
 }
 
