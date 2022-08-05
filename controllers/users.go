@@ -65,6 +65,15 @@ func (u Users) ProcessSignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//TODO - Implement cookie for sessions management
+	cookie := http.Cookie{
+		Name:  "email",
+		Value: user.Email,
+		Path:  "/", // cookie can be accessed by other pages, no constraints
+	}
+
+	http.SetCookie(w, &cookie)
+
 	fmt.Fprintf(w, "User authenticated: %+v", user)
 	// TODO - redirect user to their gallery on successful login
 }
