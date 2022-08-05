@@ -29,18 +29,18 @@ func Must(t Template, err error) Template {
 	return t
 }
 
-func Parse(filepath string) (Template, error) {
-	tpl, err := template.ParseFiles(filepath)
-	if err != nil {
-		return Template{}, fmt.Errorf("parsing template %w", err)
-	}
+// func Parse(filepath string) (Template, error) {
+// 	tpl, err := template.ParseFiles(filepath)
+// 	if err != nil {
+// 		return Template{}, fmt.Errorf("parsing template %w", err)
+// 	}
 
-	t := Template{
-		HTMLTpl: tpl,
-	}
+// 	t := Template{
+// 		HTMLTpl: tpl,
+// 	}
 
-	return t, nil
-}
+// 	return t, nil
+// }
 
 type Template struct {
 	HTMLTpl *template.Template
