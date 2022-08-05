@@ -67,9 +67,10 @@ func (u Users) ProcessSignIn(w http.ResponseWriter, r *http.Request) {
 
 	//TODO - Implement cookie for sessions management
 	cookie := http.Cookie{
-		Name:  "email",
-		Value: user.Email,
-		Path:  "/", // cookie can be accessed by other pages, no constraints
+		Name:     "email",
+		Value:    user.Email,
+		Path:     "/", // cookie can be accessed by other pages, no constraints
+		HttpOnly: true,
 	}
 
 	http.SetCookie(w, &cookie)
