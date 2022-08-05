@@ -58,7 +58,7 @@ func (us *UserService) Authenticate(email, password string) (*User, error) {
 		FROM users WHERE email=$1`, email)
 
 	//Scan the result - access the db row and assign to struct fields
-	err := row.Scan(&user.ID, &user, user.PasswordHash)
+	err := row.Scan(&user.ID, &user.PasswordHash)
 	if err != nil {
 		//TODO: handle error when an email address doesn't have an account
 		//TODO: in other words, the result of QueryRow (deferred to Scan method) is 0 row
