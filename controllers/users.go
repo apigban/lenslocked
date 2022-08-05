@@ -9,7 +9,7 @@ import (
 
 type Users struct {
 	Templates struct {
-		New Template
+		New    Template
 		SignIn Template
 	}
 	UserService *models.UserService
@@ -46,3 +46,4 @@ func (u Users) SignIn(w http.ResponseWriter, r *http.Request) {
 	data.Email = r.FormValue("email")
 	u.Templates.SignIn.Execute(w, data)
 }
+
