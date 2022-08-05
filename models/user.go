@@ -70,7 +70,7 @@ func (us *UserService) Authenticate(email, password string) (*User, error) {
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
 	if err != nil {
 		fmt.Printf("Password is invalid: %v\n", password)
-		return nil, fmt.Errorf("authenticate: %w, err")
+		return nil, fmt.Errorf("authenticate: %w", err)
 	}
 	fmt.Println("Password is correct!")
 	return &user, nil
