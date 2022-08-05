@@ -6,6 +6,8 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/csrf"
 )
 
 func ParseFS(fs fs.FS, patterns ...string) (Template, error) {
@@ -57,9 +59,28 @@ type Template struct {
 }
 
 func (t Template) Execute(w http.ResponseWriter, r *http.Request, data interface{}) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	// Clone template for each web request
+	// needed because r is a pointer to a request
+	// avoids modification to template if there are multiple web requests (race conditions are avoided)
+	// a copy of the template is generated for each individual web request
+	//TODO - alternative, put a lock on the template if it is being used by a request
+	tpl, err := t.htmlTpl.Clone()
+	if err != nil {
+		log.Printf("cloning template: %v, err")
+		http.Error(w, "There was an error rendering the page.", http.StatusInternalServerError)
+	}
 
-	err := t.htmlTpl.Execute(w, data)
+	// Update template to use correct csrf Function
+	tpl = tpl.Funcs(
+		template.FuncMap{
+			"csrfField": func() template.HTML {
+				return csrf.TemplateField(r)
+			},
+		},
+	)
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	err = tpl.Execute(w, data)
 	if err != nil {
 		log.Printf("Executing template %v", err)
 		http.Error(w, "There was an error executing the template.", http.StatusInternalServerError)
