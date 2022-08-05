@@ -9,6 +9,7 @@ import (
 	"github.com/apigban/lenslocked/templates"
 	"github.com/apigban/lenslocked/views"
 	"github.com/go-chi/chi/v5"
+	"github.com/gorilla/csrf"
 )
 
 func main() {
@@ -48,11 +49,17 @@ func main() {
 	r.Post("/signin", usersC.ProcessSignIn)
 	r.Get("/signup", usersC.New)
 	r.Post("/users", usersC.Create)
-	r.Get("/users/me", usersC.CurrentUser) 
+	r.Get("/users/me", usersC.CurrentUser)
 
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Page not found", http.StatusNotFound)
 	})
 	fmt.Println("Starting the server on :3000...")
-	http.ListenAndServe(":3000", r)
+
+	csrfKey := "gFvi45R4fy5xNBlnEeZtQbfAVCYEIAUX"
+	csrfMw := csrf.Protect([]byte(csrfKey),
+		csrf.Secure(false), //TODO - fix before deployment, breaks POST
+	)
+
+	http.ListenAndServe(":3000", csrfMw(r))
 }
